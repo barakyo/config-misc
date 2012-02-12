@@ -1,0 +1,94 @@
+#! /bin/sh
+
+###########################################################################
+# Example auto start file for i3-wm, I execute it from i3 config with
+# exec $HOME/bin/auto-start-for-i3
+#
+# For mouse moving I use xte. In Debian its in the package xautomation.
+###########################################################################
+
+
+# Wait for program coming up
+wait_for () {
+    n=0
+    while true
+    do
+	if $1; then
+	    break
+	else
+	    # 10 Sekunden timeout
+	    if [ $n -eq 10 ]; then
+		xmessage "Fehler bei: $1"
+		break
+	    else
+		n=`expr $n + 1`
+		sleep 1
+	    fi
+	fi
+    done
+    sleep 1
+}
+
+### --- Emacs --- ###
+/home/fhaun/CVS/emacs-trunk/src/emacs &
+wait_for "xdotool search --classname ^Emacs$"
+
+# move mouse to right
+xte 'mousemove 1400 900'
+
+### --- ding ---- ###
+ding &
+wait_for "xdotool search --classname ^Ding$"
+sleep 3 # FIXME, sometimes it doesnt work and ding is tabbed
+i3-msg border none
+
+# make right half bigger
+i3-msg resize grow left 16 px or 16 ppt
+
+# build container
+i3-msg split v
+sleep 1
+
+### --- Terminal --- ###
+xfce4-terminal &
+wait_for "xdotool search --classname ^Xfce4-terminal$"
+
+# Make Terminal bigger and Ding smaller
+i3-msg resize grow up 32 px or 32 ppt
+
+### --------------------------------- tab START--- ###
+### ---------------------------------------------- ###
+i3-msg split v
+i3-msg layout tabbed
+
+### --- gnome-commander --- ###
+gnome-commander &
+wait_for "xdotool search --classname ^Gnome-commander$"
+
+### --- chromium --- ###
+chromium &
+wait_for "xdotool search --classname ^Chromium$"
+
+### --- pdf --- ###
+evince /home/fhaun/Dokumente/Haskell/Haskell.pdf &
+wait_for "xdotool search --name Haskell.pdf"
+### ---------------------------------------------- ###
+### ---------------------------------- tab END --- ###
+
+### --- New terminal left under Emacs --- ###
+xte 'mousemove 10 10'
+i3-msg split v
+xfce4-terminal &
+sleep 2
+
+# terminal without border + make smaller
+i3-msg border none
+i3-msg resize shrink up 32 px or 32 ppt
+
+# Move the mouse to desired position ;-)
+xte 'mousemove 800 500'
+
+# Need a refresh, here we go...
+xrefresh &
+
+exit 0
