@@ -1,0 +1,11 @@
+
+yeahconsole*term:          xterm
+yeahconsole*background:    #4D4D4D
+yeahconsole*foreground:    #E0E0E0
+yeahconsole*font:          -misc-*-medium-r-normal-*-15-*-*-*-*-*-*-*
+yeahconsole*cursorBlink:   true
+yeahconsole*consoleHeight: 12
+yeahconsole*screenWidth:   800
+yeahconsole*toggleKey:     Control+KP_Multiply
+
+
