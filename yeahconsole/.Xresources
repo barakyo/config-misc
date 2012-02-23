@@ -1,4 +1,6 @@
 
+! Setup example for yeahconsole
+!
 yeahconsole*term:          xterm
 yeahconsole*background:    #4D4D4D
 yeahconsole*foreground:    #E0E0E0
@@ -7,5 +9,6 @@ yeahconsole*cursorBlink:   true
 yeahconsole*consoleHeight: 12
 yeahconsole*screenWidth:   800
 yeahconsole*toggleKey:     Control+KP_Multiply
+yeahconsole*handleColor:   #610000
 
 
