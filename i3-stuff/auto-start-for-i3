@@ -31,14 +31,14 @@ wait_for () {
 
 ### --- Emacs --- ###
 /home/fhaun/CVS/emacs-trunk/src/emacs &
-wait_for "xdotool search --classname ^Emacs$"
+wait_for "xdotool search --onlyvisible --classname ^Emacs$"
 
 # move mouse to right
 xte 'mousemove 1400 900'
 
 ### --- ding ---- ###
 ding &
-wait_for "xdotool search --classname ^Ding$"
+wait_for "xdotool search --onlyvisible --classname ^Ding$"
 sleep 3 # FIXME, sometimes it doesnt work and ding is tabbed
 i3-msg border none
 
@@ -51,7 +51,7 @@ sleep 1
 
 ### --- Terminal --- ###
 xfce4-terminal &
-wait_for "xdotool search --classname ^Xfce4-terminal$"
+wait_for "xdotool search --onlyvisible --classname ^Xfce4-terminal$"
 
 # Make Terminal bigger and Ding smaller
 i3-msg resize grow up 32 px or 32 ppt
@@ -63,15 +63,15 @@ i3-msg layout tabbed
 
 ### --- gnome-commander --- ###
 gnome-commander &
-wait_for "xdotool search --classname ^Gnome-commander$"
+wait_for "xdotool search --onlyvisible --classname ^Gnome-commander$"
 
 ### --- chromium --- ###
 chromium &
-wait_for "xdotool search --classname ^Chromium$"
+wait_for "xdotool search --onlyvisible --classname ^Chromium$"
 
 ### --- pdf --- ###
 evince /home/fhaun/Dokumente/Haskell/Haskell.pdf &
-wait_for "xdotool search --name Haskell.pdf"
+wait_for "xdotool search --onlyvisible --name Haskell.pdf"
 ### ---------------------------------------------- ###
 ### ---------------------------------- tab END --- ###
 
