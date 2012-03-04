@@ -1,0 +1,54 @@
+#! /bin/sh
+
+# Simple autostart file for i3-wm, you can execute it from i3 config with
+# exec $HOME/bin/auto-start-for-i3-simple
+#
+# xdotool and xmessage must be installed
+
+# Wait for program
+wait_for () {
+    n=0
+    while true
+    do
+	if $1; then
+	    break
+	else
+	    # 10 seconds timeout
+	    if [ $n -eq 10 ]; then
+		xmessage "Error on: $1"
+		break
+	    else
+		n=`expr $n + 1`
+		sleep 1
+	    fi
+	fi
+    done
+    sleep 1
+}
+
+# Start some programs
+#
+# ______________________
+# |          |          |
+# |  emacs   |  chrome  |
+# |          |          |
+# |          |          |
+# |          |----------|
+# |          |  xterm   |
+# |__________|__________|
+
+
+emacs &
+wait_for "xdotool search --onlyvisible --classname ^Emacs$"
+
+i3-msg split h
+
+chromium &
+wait_for "xdotool search --onlyvisible --classname ^Chromium$"
+
+i3-msg split v
+
+xterm &
+wait_for "xdotool search --onlyvisible --classname ^Xterm$"
+
+exit 0
