@@ -9,16 +9,17 @@
 
 
 # Wait for program coming up
-wait_for () {
+wait_for_program () {
     n=0
     while true
     do
-	if $1; then
+	# PID of last background command
+	if xdotool search --onlyvisible --pid $!; then
 	    break
 	else
-	    # 10 Sekunden timeout
-	    if [ $n -eq 10 ]; then
-		xmessage "Fehler bei: $1"
+	    # 20 seconds timeout
+	    if [ $n -eq 20 ]; then
+		xmessage "Error on executing"
 		break
 	    else
 		n=`expr $n + 1`
@@ -26,20 +27,18 @@ wait_for () {
 	    fi
 	fi
     done
-    sleep 1
 }
 
 ### --- Emacs --- ###
 /home/fhaun/CVS/emacs-trunk/src/emacs &
-wait_for "xdotool search --onlyvisible --classname ^Emacs$"
+wait_for_program
 
 # move mouse to right
 xte 'mousemove 1400 900'
 
 ### --- ding ---- ###
 ding &
-wait_for "xdotool search --onlyvisible --classname ^Ding$"
-sleep 3 # FIXME, sometimes it doesnt work and ding is tabbed
+wait_for_program
 i3-msg border none
 
 # make right half bigger
@@ -51,7 +50,7 @@ sleep 1
 
 ### --- Terminal --- ###
 xfce4-terminal &
-wait_for "xdotool search --onlyvisible --classname ^Xfce4-terminal$"
+wait_for_program
 
 # Make Terminal bigger and Ding smaller
 i3-msg resize grow up 32 px or 32 ppt
@@ -63,15 +62,15 @@ i3-msg layout tabbed
 
 ### --- gnome-commander --- ###
 gnome-commander &
-wait_for "xdotool search --onlyvisible --classname ^Gnome-commander$"
+wait_for_program
 
 ### --- chromium --- ###
 chromium &
-wait_for "xdotool search --onlyvisible --classname ^Chromium$"
+wait_for_program
 
 ### --- pdf --- ###
 evince /home/fhaun/Dokumente/Haskell/Haskell.pdf &
-wait_for "xdotool search --onlyvisible --name Haskell.pdf"
+wait_for_program
 ### ---------------------------------------------- ###
 ### ---------------------------------- tab END --- ###
 
@@ -79,9 +78,8 @@ wait_for "xdotool search --onlyvisible --name Haskell.pdf"
 xte 'mousemove 10 10'
 i3-msg split v
 xfce4-terminal &
-sleep 2
 
-# terminal without border + make smaller
+# terminal without border and make it smaller
 i3-msg border none
 i3-msg resize shrink up 32 px or 32 ppt
 

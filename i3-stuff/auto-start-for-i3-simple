@@ -6,16 +6,17 @@
 # xdotool and xmessage must be installed
 
 # Wait for program
-wait_for () {
+wait_for_program () {
     n=0
     while true
     do
-	if $1; then
+	# PID of last background command
+	if xdotool search --onlyvisible --pid $!; then
 	    break
 	else
-	    # 10 seconds timeout
-	    if [ $n -eq 10 ]; then
-		xmessage "Error on: $1"
+	    # 20 seconds timeout
+	    if [ $n -eq 20 ]; then
+		xmessage "Error on executing"
 		break
 	    else
 		n=`expr $n + 1`
@@ -23,7 +24,6 @@ wait_for () {
 	    fi
 	fi
     done
-    sleep 1
 }
 
 # Start some programs
@@ -39,16 +39,16 @@ wait_for () {
 
 
 emacs &
-wait_for "xdotool search --onlyvisible --classname ^Emacs$"
+wait_for_program
 
 i3-msg split h
 
 chromium &
-wait_for "xdotool search --onlyvisible --classname ^Chromium$"
+wait_for_program
 
 i3-msg split v
 
 xterm &
-wait_for "xdotool search --onlyvisible --classname ^Xterm$"
+wait_for_program
 
 exit 0
